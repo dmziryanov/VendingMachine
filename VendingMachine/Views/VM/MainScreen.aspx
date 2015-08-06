@@ -5,8 +5,8 @@
 <html>
 <head runat="server">
     <link type="text/css" href="/Content/jquery-ui-1.8.12.custom.css" rel="stylesheet" />
-        <script type="text/javascript" src="../../Scripts/jquery-1.8.3.min.js"></script>
-	<script type="text/javascript" src="../../Scripts/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/jquery-ui.min.js"></script>
     <script type="text/javascript" src="../../Scripts/javascript_security.js"></script>
     <script type="text/javascript" src="../../Scripts/knockout-3.1.0.js"></script>
     <script type="text/javascript" src="../../Scripts/SystemFunctions.js"></script>
@@ -44,13 +44,13 @@
             position: relative;
         }
 
-        #enter_link span.ui-icon {
+            #enter_link span.ui-icon {
                 margin: 0 5px 0 0;
                 position: absolute;
                 left: .2em;
                 top: 50%;
                 margin-top: -8px;
-        }
+            }
 
         #reg_link {
             padding: .4em 1em .4em 20px;
@@ -130,20 +130,12 @@
 </head>
 <body>
     <script>
-        
-        Good = function (name, type, price, quantity) {
-            this.name = name;
-            this.type = type;
-            this.price = price;
-            this.quantity = quantity;
-        }
 
-        viewModel = {
-            Goods: ko.observableArray([
-                new Good("Tea", 2, 20, 20)
-            ]),
-            showRenderTimes: ko.observable(false)
-        };
+        function viewModel() {
+                self.Goods = ko.observableArray([
+                    { name: "Tea", type: 2, price: 20, quantity: 20 }
+            ]);
+        }
 
         VMMachineGoodTemplate = "<p><h3>{0}</h3><input id='Buy{2}' type='submit' value='Buy {1}'/></p>";
         WalletStringTemplate = "<p><h3>Coin {0}. Available {1}</h3>";
@@ -155,9 +147,17 @@
                 htmlString += String.format(VMMachineGoodTemplate, data.Goods[j].Name + ". Price per unit: " + data.Goods[j].Price + " roubles. Available " + data.Goods[j].Quantity, data.Goods[j].Name, data.Goods[j].Type);
             };
 
-            pendingRequests();
 
-           // $("#Assortment").html(htmlString);
+            $.ajax({
+                type: "GET",
+                url: "/VM/GetAssortment",
+                datatype: "json",
+                success: function (data) {
+                    viewModel.Goods(data.Goods);
+                }
+            });
+
+            // $("#Assortment").html(htmlString);
 
             $("input[id*='Buy']").click(function () {
                 var button = $(this);
@@ -267,9 +267,7 @@
         </tr>
         <tr>
             <td colspan="2" style="font-size: large"></td>
-            <td id="UserBalance">
-            
-            </td>
+            <td id="UserBalance"></td>
         </tr>
         <tr>
             <td>
@@ -284,13 +282,14 @@
             <td></td>
             <td>
                 <div id="Assortment">
-                        <ul data-bind="foreach: Goods">
-                <li>
-        <div>
-            <p><h3 data-bind="text: name">{0}</h3><input data-bind="id: name" type='submit' value='Buy$index'/></p> 
-        </div>
-    </li>
-</ul>
+                    <ul data-bind="foreach: Goods">
+                        <li>
+                                    Name at position <span data-bind="text: $index"> </span>: 
+                                    <span data-bind="text: name"> </span>
+                                    <h3 data-bind="content: name"></h3>
+                                    <input data-bind="id: name" type='submit' value='Buy$index' />
+                        </li>
+                    </ul>
                 </div>
             </td>
         </tr>

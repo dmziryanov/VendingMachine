@@ -25,14 +25,10 @@ namespace VendingMachine.Models
 		private Wallet _vmWallet;
 		private Assortment _vmAssortment;
 		private int _customerBalance;
-		private float x;
-		private double d;
 		private readonly object _syncRoot = new Object();
 
 		public WManager()
 		{
-			d = x;
-			_customerBalance = (byte)d++;
 			SetInitialValues();
 		}
 

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+<components>
+  <component id="WManager"
+             service="VendingMachine.Models.IWalletManager,  VendingMachine"
+             type="VendingMachine.Models.WManager,  VendingMachine">
+  </component>
+
+  <component id="AuthService"
+             service="VendingMachine.AuthServiceReference.IAuthService,  VendingMachine"
+             type="VendingMachine.AuthServiceReference.AuthServiceClient,  VendingMachine"
+             lifestyle="PerWebRequest">
+  </component>
+</components>
+</configuration>
